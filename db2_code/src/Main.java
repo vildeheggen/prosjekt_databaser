@@ -4,6 +4,8 @@ public class Main {
         LogInCtrl loginCtrl = new LogInCtrl ();
         loginCtrl.login();
        
+        //makePostCtrl makepost = new makePostCtrl();
+        //makepost.makePost();
 
     }
 

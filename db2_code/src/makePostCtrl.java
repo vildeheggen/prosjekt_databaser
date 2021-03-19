@@ -2,7 +2,7 @@ import java.sql.*;
 import java.util.*;
 
 public class makePostCtrl extends dbconn{
-    public int ThreadID = 1; //default 1??
+    public int ThreadID = 1; 
     private PreparedStatement regStatement1;
     private PreparedStatement regStatement2;
 
@@ -10,7 +10,8 @@ public class makePostCtrl extends dbconn{
         try { 
             Statement stmt = conn.createStatement();
             String query = "select max(ThreadID) from Thread";
-            int max_id = stmt.executeQuery(query);
+            ResultSet rs = stmt.executeQuery(query);
+            int max_id = rs.getInt(1);
             ThreadID = max_id+1;
         } catch (Exception e) { 
             System.out.println("db error during select of Thread = "+e);
@@ -29,13 +30,16 @@ public class makePostCtrl extends dbconn{
         System.out.print("Enter post: ");  
         String Description= sc3.nextLine();
         Scanner sc4= new Scanner(System.in);
-        System.out.print("Anonymous or not? Enter true or false: ");  
-        String isAnonymous= sc4.nextLine();
+        System.out.print("Anonymous or not? Enter true or false: "); 
+        String anonymous = sc4.nextLine();
+        Boolean isAnonymous = Boolean.valueOf(anonymous);
 
+        int FolderID = 1;
         try { 
-            Statement stmt = conn.createStatement();
+            Statement stmt2 = conn.createStatement();
             String query = "select FolderID from Folder where FolderName='Exam'";
-            int FolderID = stmt.executeQuery(query);
+            ResultSet rs2 = stmt2.executeQuery(query);
+            FolderID = rs2.getInt(1);
         } catch (Exception e) { 
             System.out.println("db error during select of Folder = "+e);
         }
@@ -53,16 +57,23 @@ public class makePostCtrl extends dbconn{
 
         try {
             this.findThreadID();
-            regStatement1.setInt(ThreadID, "Question", Title, FolderID);
+            regStatement1.setInt(1, ThreadID);
+            regStatement1.setString(2, "Question");
+            regStatement1.setString(3, Title);
+            regStatement1.setInt(4, FolderID);//Er det slik man gjør det??
             regStatement1.execute();
         } catch (Exception e) {
-            System.out.println("db error during insert of Thread" +e); //??
+            System.out.println("db error during insert of Thread" +e); 
         }
         try {
-            regStatement2.setInt(1, Description, Email, isAnonymous, ThreadID);
+            regStatement2.setInt(1, 1);
+            regStatement2.setString(2, Description);
+            regStatement2.setString(3, Email);
+            regStatement2.setBoolean(4, isAnonymous);
+            regStatement2.setInt(5, ThreadID);
             regStatement2.execute();
         } catch (Exception e) {
-            System.out.println("db error during insert of Post sekvnr= "+sekvNr+" postNr="+postNr); //??
+            System.out.println("db error during insert of Post" +e); 
         }
     }
 }
