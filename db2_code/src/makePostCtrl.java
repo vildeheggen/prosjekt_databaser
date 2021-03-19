@@ -3,7 +3,6 @@ import java.util.*;
 
 public class makePostCtrl extends dbconn{
     public int ThreadID = 1; //default 1??
-    public int FolderID = 1;
     private PreparedStatement regStatement1;
     private PreparedStatement regStatement2;
 
@@ -18,36 +17,28 @@ public class makePostCtrl extends dbconn{
         }
     }
 
-    public void findFolderID(){
-        System.out.print("Enter foldername: ");  
-        String FolderName= sc.nextLine();
-         try { 
-            Statement stmt = conn.createStatement();
-            String query = "select FolderID from Folder where FolderName='FolderName'";
-            ResultSet rs = stmt.executeQuery(query);
-            int size =0;
-            if (rs != null) 
-            {
-            rs.last();    // moves cursor to the last row
-            size = rs.getRow(); // get row id 
-            }
-            if (size==1){FolderID = rs.getInt(1);}
-        } catch (Exception e) { 
-            System.out.println("db error during select of Folder = "+e);;
-        }
-    }
-
-    public void makePost(ThreadID) {
+    
+    public void makePost() {
+        Scanner sc1= new Scanner(System.in);
         System.out.print("Enter email: ");  
-        String Email= sc.nextLine();
-        System.out.print("Enter tag. Alternatives; 'Questions', 'Announcements', 'Homework', 'Homework solutions', 'Lectures notes', 'General announcements': ");  
-        String Tag= sc.nextLine();
+        String Email= sc1.nextLine();
+        Scanner sc2= new Scanner(System.in);
         System.out.print("Enter title: ");  
-        String Title= sc.nextLine();
+        String Title= sc2.nextLine();
+        Scanner sc3= new Scanner(System.in);
         System.out.print("Enter post: ");  
-        String Description= sc.nextLine();
+        String Description= sc3.nextLine();
+        Scanner sc4= new Scanner(System.in);
         System.out.print("Anonymous or not? Enter true or false: ");  
-        String isAnonymous= sc.nextLine();
+        String isAnonymous= sc4.nextLine();
+
+        try { 
+            Statement stmt = conn.createStatement();
+            String query = "select FolderID from Folder where FolderName='Exam'";
+            int FolderID = stmt.executeQuery(query);
+        } catch (Exception e) { 
+            System.out.println("db error during select of Folder = "+e);
+        }
 
         try { 
             regStatement1 = conn.prepareStatement("INSERT INTO Thread VALUES ( (?), (?), (?), (?)");  
@@ -61,10 +52,11 @@ public class makePostCtrl extends dbconn{
         }
 
         try {
-            regStatement1.setInt(ThreadID, Tag, Title, FolderID);
+            this.findThreadID();
+            regStatement1.setInt(ThreadID, "Question", Title, FolderID);
             regStatement1.execute();
         } catch (Exception e) {
-            System.out.println("db error during insert of Thread sekvnr= "+sekvNr+" postNr="+postNr); //??
+            System.out.println("db error during insert of Thread" +e); //??
         }
         try {
             regStatement2.setInt(1, Description, Email, isAnonymous, ThreadID);
