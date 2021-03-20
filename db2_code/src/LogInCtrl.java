@@ -12,15 +12,16 @@ public class LogInCtrl extends dbconn{
         //System.out.println(email.length());
         //System.out.println(password.length());
         String query = "select * from User where Email = '" + email + "' and Password = '" + password + "'";
-        System.out.println(query);
+        //System.out.println(query);
 
-        try { 
+        try { //sjekk bruk av try og catch
             Statement stmt = conn.createStatement();
-            //String query = "select * from User where Email = " + email + " and Password = " + password;
-            //System.out.println(query);
             ResultSet rs = stmt.executeQuery(query);
-            System.out.println(rs);
-            if (rs != null){System.out.print("Correct login");  }
+            //System.out.println(stmt);
+            //System.out.println(rs.next());
+            
+
+            if (rs.next()){System.out.print("Correct login");  }
             else {System.out.print("Wrong login");  }
 
         } catch (Exception e) { 
