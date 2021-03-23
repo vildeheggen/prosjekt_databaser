@@ -5,7 +5,25 @@ public class replyCtrl extends dbconn{
     public int PostID; 
     public int ThreadID;
     public String folder_name = "Exam";
+    public String Email;
+    public String Description;
+    public Boolean isAnonymous;
     private PreparedStatement regStatement;
+
+    public void askUser(){
+        Scanner sc1= new Scanner(System.in);
+        System.out.print("Enter email: ");  
+        Email= sc1.nextLine();
+
+        Scanner sc2= new Scanner(System.in);
+        System.out.print("Enter description: ");  
+        Description = sc2.nextLine();
+
+        Scanner sc3= new Scanner(System.in);
+        System.out.print("Anonymous or not? Enter true or false: ");  
+        String anonymous = sc3.nextLine();
+        isAnonymous = Boolean.valueOf(anonymous);
+    }
 
     //Finner første ThreadID med riktig FolderName
     public void findThreadID(){
@@ -37,8 +55,10 @@ public class replyCtrl extends dbconn{
     }
 
     public void reply(){
+        this.askUser();
         this.findThreadID();
         this.findPostID();
+
         try { 
             regStatement = conn.prepareStatement("INSERT INTO Post VALUES ( (?), (?), (?), (?), (?) )");  
         } catch (Exception e) { 
@@ -46,9 +66,9 @@ public class replyCtrl extends dbconn{
         }
         try {
             regStatement.setInt(1, PostID);
-            regStatement.setString(2, "description");
-            regStatement.setString(3, "stud@example.com");
-            regStatement.setBoolean(4, true);
+            regStatement.setString(2, Description);
+            regStatement.setString(3, Email);
+            regStatement.setBoolean(4, isAnonymous);
             regStatement.setInt(5, ThreadID);
             regStatement.execute();
         } catch (Exception e) {
