@@ -11,7 +11,7 @@ public class LogInCtrl extends dbconn{
         String password= sc2.nextLine();
         //System.out.println(email.length());
         //System.out.println(password.length());
-        String query = "select * from User where Email = '" + email + "' and Password = '" + password + "'";
+        String query = "select * from Users where Email = '" + email + "' and Password = '" + password + "'";
         //System.out.println(query);
 
         try { //sjekk bruk av try og catch
@@ -25,7 +25,7 @@ public class LogInCtrl extends dbconn{
             else {System.out.print("Wrong login");  }
 
         } catch (Exception e) { 
-            System.out.println("db error during select of User = "+e);
+            System.out.println("db error during select of Users = "+e);
         }
     }
 }
