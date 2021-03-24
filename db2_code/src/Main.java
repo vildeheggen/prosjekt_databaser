@@ -9,9 +9,17 @@ public class Main {
         //makepost.connect();
         //makepost.makePost();
 
-        replyCtrl reply1 = new replyCtrl();
-        reply1.connect();
-        reply1.reply();
+        //replyCtrl reply1 = new replyCtrl();
+        //reply1.connect();
+        //reply1.reply();
+
+        //SearchCtrl search = new SearchCtrl();
+        //search.connect();
+        //search.findPostsWithKeyWord();
+
+        ViewStatistics statistics = new ViewStatistics();
+        statistics.connect();
+        statistics.doQueries();
 
     }
 
