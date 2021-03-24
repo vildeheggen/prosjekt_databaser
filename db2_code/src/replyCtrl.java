@@ -9,11 +9,19 @@ public class replyCtrl extends dbconn{
     public String Description;
     public Boolean isAnonymous;
     private PreparedStatement regStatement;
+    private String confirmedEmail;
+
+    //constructor
+    public replyCtrl(String confirmedEmail ){
+        this.confirmedEmail = confirmedEmail;
+
+    };
 
     public void askUser(){
-        Scanner sc1= new Scanner(System.in);
-        System.out.print("Enter email: ");  
-        Email= sc1.nextLine();
+        // Scanner sc1= new Scanner(System.in);
+        // System.out.print("Enter email: ");  
+        // Email= sc1.nextLine();
+        Email = confirmedEmail;
 
         Scanner sc2= new Scanner(System.in);
         System.out.print("Enter description: ");  
@@ -39,7 +47,7 @@ public class replyCtrl extends dbconn{
         }
     }
 
-    //Finner PostID som max(PostID)+1 from en gitt ThreadID
+    //Finner PostID som max(PostID)+1 fra en gitt ThreadID
     public void findPostID(){
         try { 
             Statement stmt = conn.createStatement();

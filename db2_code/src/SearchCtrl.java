@@ -9,9 +9,11 @@ public class SearchCtrl extends dbconn{
         try {
             Statement stmt = conn.createStatement();
             rs = stmt.executeQuery(query);
+            System.out.println("result " + rs.next());
 
-            if (rs.next()){System.out.print("Found post(s) with keyword "+keyWord);  }
-            else {System.out.print("No posts with keyword "+keyWord);  }
+            if (rs.next()){System.out.println("Found post(s) with keyword "+keyWord);  }
+
+            else {System.out.println("No posts with keyword "+keyWord);  }
 
         } catch (Exception e) { 
             System.out.println("db error during select of Post = "+e);
