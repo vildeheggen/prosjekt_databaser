@@ -2,6 +2,7 @@ import java.sql.*;
 import java.util.*;
 
 public class makePostCtrl extends dbconn{
+
     public int ThreadID; 
     public int FolderID;
     public int PostID = 1;
@@ -15,18 +16,28 @@ public class makePostCtrl extends dbconn{
     public String tag = "Questions";
     private PreparedStatement regStatement1;
     private PreparedStatement regStatement2;
+    private String confirmedEmail;
+    
+    //constructor
+    public makePostCtrl(String confirmedEmail ){
+        this.confirmedEmail = confirmedEmail;
+
+    };
 
     //Kunne også ha sjekket om bruker faktisk var medlem av kurset 
 
     //spør bruker om info den trenger for å opprette en post og oppdaterer de globale variablene deretter
     public void askUser(){
-        Scanner sc1= new Scanner(System.in);
-        System.out.print("Enter email: ");  
-        Email= sc1.nextLine();
+        System.out.print("Let´s make a new thread\n "); 
+        // Scanner sc1= new Scanner(System.in);
+        // System.out.print("Enter user email: ");  
+        // Email= sc1.nextLine();
+        Email = confirmedEmail;
 
         Scanner sc2= new Scanner(System.in);
         System.out.print("Enter course: ");  
         course_name = sc2.nextLine();
+        //TODO: fix the same for the course as for log in
 
         Scanner sc3 = new Scanner(System.in);
         System.out.print("Enter title: ");  
@@ -68,7 +79,6 @@ public class makePostCtrl extends dbconn{
             System.out.println("db error during select of Folder = "+e);
         }
     }
-    
     //finner ThreadID for ny Thread som skal lages i makeThread(), gitt FolderName fra bruker
     public void findThreadID(){
         try { 
@@ -110,6 +120,7 @@ public class makePostCtrl extends dbconn{
         try { 
             regStatement2 = conn.prepareStatement("INSERT INTO Post VALUES ( (?), (?), (?), (?), (?) )");  
         } catch (Exception e) { 
+
             System.out.println("db error during prepare of insert into Post");
         }
         try {
