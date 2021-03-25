@@ -3,6 +3,7 @@ import java.util.*;
 
 public class LogInCtrl extends dbconn{
     private String confirmedEmail;
+
     public String login(){
         Scanner sc1= new Scanner(System.in);
         System.out.print("Enter email: ");  
