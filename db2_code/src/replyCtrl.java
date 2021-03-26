@@ -14,27 +14,55 @@ public class replyCtrl extends dbconn{
     // confirmedEmail brukes til å sjekke om bruker er innlogget i systemet.
     private String confirmedEmail;
 
+    // variabel som sjekker om thread er i riktig folder
+    public Boolean isInFolder = false;
+
     // konstruktør som tar inn confirmed Email fra innlogget bruker.
     public replyCtrl(String confirmedEmail ){
         this.confirmedEmail = confirmedEmail;
     }
+
+    //checkThread() sjekker om gitt ThreadID tilhører gitt folder_name
+    //oppdaterer isInFolder til å være true hvis det er tilfellet
+    public void checkThread(){
+        String query = "select * from Folder join Thread using (FolderID) where FolderName='"+ folder_name +"'and ThreadID = '" + ThreadID + "'";
+        try { 
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            //System.out.println(rs.next());
+            if (rs.next()){
+                isInFolder = true;}
+            else {
+                System.out.println("The chosen threadID is not in folder = " + folder_name);
+                System.out.println("Try again. ");}
+        }
+        catch (Exception e) { 
+            System.out.println("db error during check of Thread is in folder = " + folder_name);
+        }
+    }
+
     // askUser() henter inn brukerinput for å lage reply på Thread bruker ønsker ved å oppdatere globale variabler.
     public void askUser(){
 
         // ber bruker skrive inn ThreadID av thread den vil replye på.
-        Scanner sc1= new Scanner(System.in);
-        System.out.print("Enter ThreadID of Thread you want to answer: ");  
-        String str1 = sc1.nextLine();
-        ThreadID = Integer.parseInt(str1);
-
+        while(isInFolder == false){
+            Scanner sc1= new Scanner(System.in);
+            System.out.print("Enter ThreadID of Thread you want to answer: ");  
+            String str1 = sc1.nextLine();
+            ThreadID = Integer.parseInt(str1);
+            this.checkThread();
+        }
+        
         Scanner sc2= new Scanner(System.in);
         System.out.print("Enter description: ");  
         Description = sc2.nextLine();
+       
 
         Scanner sc3= new Scanner(System.in);
         System.out.print("Anonymous or not? Enter true or false: ");  
         String anonymous = sc3.nextLine();
         isAnonymous = Boolean.valueOf(anonymous);
+        
     }
 
     // findPostID() finner PostID som max(PostID)+1 fra en gitt ThreadID
