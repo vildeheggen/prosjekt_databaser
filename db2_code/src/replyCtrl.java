@@ -18,9 +18,6 @@ public class replyCtrl extends dbconn{
     };
 
     public void askUser(){
-        // Scanner sc1= new Scanner(System.in);
-        // System.out.print("Enter email: ");  
-        // Email= sc1.nextLine();
         Email = confirmedEmail;
 
         Scanner sc1= new Scanner(System.in);
@@ -37,20 +34,6 @@ public class replyCtrl extends dbconn{
         String anonymous = sc3.nextLine();
         isAnonymous = Boolean.valueOf(anonymous);
     }
-
-    //Finner første ThreadID med riktig FolderName
-    /* public void findThreadID(){
-        String query = "select ThreadID from Thread inner join Folder using (FolderID) where FolderName = '" + folder_name + "'";
-        try { 
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query); 
-
-            if (rs.next()){ThreadID = rs.getInt(1);}
-        }
-        catch (Exception e) { 
-            System.out.println("db error during select of Thread = "+e);
-        }
-    } */
 
     //Finner PostID som max(PostID)+1 fra en gitt ThreadID
     public void findPostID(){
@@ -69,7 +52,6 @@ public class replyCtrl extends dbconn{
 
     public void reply(){
         this.askUser();
-        //this.findThreadID();
         this.findPostID();
 
         try { 

@@ -28,6 +28,8 @@ public class makePostCtrl extends dbconn{
     //checkMember() sjekker kurstilhørighet
     public Boolean checkMember(){
 
+        if (confirmedEmail == ""){return(isMember);}
+
         Scanner sc1= new Scanner(System.in);
         System.out.print("Enter the course you want to post in: ");  
         String course_name= sc1.nextLine();
@@ -46,7 +48,6 @@ public class makePostCtrl extends dbconn{
         }
         //sjekk om user er medlem av kurset
        String query2 = "select * from members where email ='" + confirmedEmail + "' and courseID = '" + courseID + "'";
-       //String query2 = "select * from members where email='stud@example.com' and courseID = 1";
         try {
             Statement stmt2 = conn.createStatement();
             ResultSet rs2 = stmt2.executeQuery(query2);
@@ -57,7 +58,7 @@ public class makePostCtrl extends dbconn{
          }
             
             else {
-                System.out.println("Access denied. Try again.");
+                System.out.println("Access denied.");
             }
             
         } catch (Exception e) { 
@@ -65,7 +66,6 @@ public class makePostCtrl extends dbconn{
         }
 
         return(isMember);
-
     }
 
 
@@ -133,17 +133,14 @@ public class makePostCtrl extends dbconn{
 
     public void makePost(){
         this.checkMember();
-        
         if (isMember){
             this.askUser();
             this.findFolderID();
             this.makeThread();}
         
         else {
-            //skriv inn kurs på nytt
-            this.makePost();
-            
-        }
+            System.out.println("");   }
+               
 
         try { 
             regStatement2 = conn.prepareStatement("INSERT INTO Post VALUES ( (?), (?), (?), (?), (?) )");  
