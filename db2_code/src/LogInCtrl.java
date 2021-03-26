@@ -22,14 +22,15 @@ public class LogInCtrl extends dbconn{
             //System.out.println(rs.next());
 
             if (rs.next()){
-                System.out.print("Correct login\n"); 
+                System.out.println("Correct login"); 
                 confirmedEmail = email;
          }
             
             else {
-                System.out.print("Wrong login\n"); 
+                System.out.println("Wrong login"); 
+                confirmedEmail = "";
         }
-            // lag en måte for confirmedEmail hvis ingen er logga inn i makePostCtrl.
+            
 
         } catch (Exception e) { 
             System.out.println("db error during select of Users = "+e);

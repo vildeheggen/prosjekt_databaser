@@ -7,7 +7,6 @@ public class makePostCtrl extends dbconn{
     public int FolderID;
     public int PostID = 1;
     public int courseID;
-    public String Email;
     public String course_name;
     public String title;
     public String description;
@@ -17,55 +16,75 @@ public class makePostCtrl extends dbconn{
     private PreparedStatement regStatement1;
     private PreparedStatement regStatement2;
     private String confirmedEmail;
-    
+    public Boolean isMember = false;
+
     //constructor
     public makePostCtrl(String confirmedEmail ){
         this.confirmedEmail = confirmedEmail;
 
     };
 
-    //Kunne også ha sjekket om bruker faktisk var medlem av kurset 
 
-    //spør bruker om info den trenger for å opprette en post og oppdaterer de globale variablene deretter
-    public void askUser(){
-        System.out.print("Let´s make a new thread\n "); 
-        // Scanner sc1= new Scanner(System.in);
-        // System.out.print("Enter user email: ");  
-        // Email= sc1.nextLine();
-        Email = confirmedEmail;
+    //checkMember() sjekker kurstilhørighet
+    public Boolean checkMember(){
 
-        Scanner sc2= new Scanner(System.in);
-        System.out.print("Enter course: ");  
-        course_name = sc2.nextLine();
-        //TODO: fix the same for the course as for log in
+        if (confirmedEmail == ""){return(isMember);}
 
-        Scanner sc3 = new Scanner(System.in);
-        System.out.print("Enter title: ");  
-        title = sc3.nextLine();
+        Scanner sc1= new Scanner(System.in);
+        System.out.print("Enter the course you want to post in: ");  
+        String course_name= sc1.nextLine();
 
-        Scanner sc4= new Scanner(System.in);
-        System.out.print("Enter description: ");  
-        description = sc4.nextLine();
-
-        Scanner sc5= new Scanner(System.in);
-        System.out.print("Anonymous or not? Enter true or false: ");  
-        String anonymous = sc5.nextLine();
-        isAnonymous = Boolean.valueOf(anonymous);
-    }
-
-    //findCourseID() finner courseID for course_name gitt av bruker
-    public void findCourseID(){
-        String query = "select CourseID from Course where Name = '" + course_name + "'";
+        //finner courseID for course_name gitt av bruker
+        String query1 = "select CourseID from Course where Name = '" + course_name + "'";
         try {
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query); 
+            Statement stmt1 = conn.createStatement();
+            ResultSet rs1 = stmt1.executeQuery(query1); 
 
-            if (rs.next()){courseID = rs.getInt(1);}
+            if (rs1.next()){courseID = rs1.getInt(1);}
+
         }
         catch (Exception e) { 
             System.out.println("db error during select of Course = "+e);
         }
+        //sjekk om user er medlem av kurset
+       String query2 = "select * from members where email ='" + confirmedEmail + "' and courseID = '" + courseID + "'";
+        try {
+            Statement stmt2 = conn.createStatement();
+            ResultSet rs2 = stmt2.executeQuery(query2);
+
+            if (rs2.next()){
+                System.out.println("You will now post a thread in " + course_name); 
+                isMember = true;
+         }
+            
+            else {
+                System.out.println("Access denied.");
+            }
+            
+        } catch (Exception e) { 
+            System.out.println("db error during check for member of Course"+e);
+        }
+
+        return(isMember);
     }
+
+
+    //spør bruker om info den trenger for å opprette en post og oppdaterer de globale variablene deretter
+    public void askUser(){
+        Scanner sc2 = new Scanner(System.in);
+        System.out.print("Enter title: ");  
+        title = sc2.nextLine();
+
+        Scanner sc3= new Scanner(System.in);
+        System.out.print("Enter description: ");  
+        description = sc3.nextLine();
+
+        Scanner sc4= new Scanner(System.in);
+        System.out.print("Anonymous or not? Enter true or false: ");  
+        String anonymous = sc4.nextLine();
+        isAnonymous = Boolean.valueOf(anonymous);
+    }
+
     //Finner FolderID for Folder hvor FolderName = "Exam" og Course er gitt av bruker
     public void findFolderID(){
         String query = "select FolderID from Folder where FolderName = '" + folder_name + "' and CourseID = '" + courseID + "'";
@@ -113,10 +132,16 @@ public class makePostCtrl extends dbconn{
     }
 
     public void makePost(){
-        this.askUser();
-        this.findCourseID();
-        this.findFolderID();
-        this.makeThread();
+        this.checkMember();
+        if (isMember){
+            this.askUser();
+            this.findFolderID();
+            this.makeThread();}
+        
+        else {
+            System.out.println("");   }
+               
+
         try { 
             regStatement2 = conn.prepareStatement("INSERT INTO Post VALUES ( (?), (?), (?), (?), (?) )");  
         } catch (Exception e) { 
@@ -126,7 +151,7 @@ public class makePostCtrl extends dbconn{
         try {
             regStatement2.setInt(1, PostID);
             regStatement2.setString(2, description);
-            regStatement2.setString(3, Email);
+            regStatement2.setString(3, confirmedEmail);
             regStatement2.setBoolean(4, isAnonymous);
             regStatement2.setInt(5, ThreadID);
             regStatement2.execute();
