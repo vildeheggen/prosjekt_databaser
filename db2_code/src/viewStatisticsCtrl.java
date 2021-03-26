@@ -2,6 +2,8 @@ import java.sql.*;
 import java.util.*;
 
 public class ViewStatisticsCtrl extends dbconn{
+    private String confirmedEmail;
+
     // validateUser() sjekker om input-email fra bruker tilhører en Instructor
     // returnerer true dersom bruker er Instructor
     private boolean validateUser() {
