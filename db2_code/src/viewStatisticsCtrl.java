@@ -1,5 +1,4 @@
 import java.sql.*;
-import java.util.*;
 
 public class ViewStatisticsCtrl extends dbconn{
     // confirmedEmail brukes til å sjekke UserType på innlogget bruker
