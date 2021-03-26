@@ -2,22 +2,23 @@ import java.sql.*;
 import java.util.*;
 
 public class ViewStatisticsCtrl extends dbconn{
+    // confirmedEmail brukes til å sjekke UserType på innlogget bruker
     private String confirmedEmail;
 
-    // validateUser() sjekker om input-email fra bruker tilhører en Instructor
+    //konstruktør som tar inn confirmed Email fra innlogget bruker.
+    public ViewStatisticsCtrl(String confirmedEmail ){
+        this.confirmedEmail = confirmedEmail;
+     };
+
+    // validateUser() sjekker om email fra innlogget bruker tilhører en bruker med UserType Instructor
     // returnerer true dersom bruker er Instructor
     private boolean validateUser() {
-        System.out.println("In order to check statistics, please enter email:");
-        Scanner sc1= new Scanner(System.in);
-        String email = sc1.nextLine();
-        sc1.close();
-        
-        String query = "SELECT UserType FROM Users WHERE Email = '"+email+"' AND UserType='Instructor'";
+        String query = "SELECT UserType FROM Users WHERE Email = '"+confirmedEmail+"' AND UserType='Instructor'";
         try {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             if (rs.next()) {  // false hvis ingen rader funnet, true hvis >= 1 rader funnet
-                System.out.println("User validated as instructor");  
+                System.out.println("User is validated as instructor");  
                 return true;
             } else {
                 System.out.println("Permission denied: User is not an instructor");
