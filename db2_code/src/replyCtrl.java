@@ -2,24 +2,26 @@ import java.sql.*;
 import java.util.*;
 
 public class replyCtrl extends dbconn{
+
+    // globale variabler som oppdateres når reply lages.
     public int PostID; 
     public int ThreadID;
     public String folder_name = "Exam";
-    public String Email;
     public String Description;
     public Boolean isAnonymous;
     private PreparedStatement regStatement;
+
+    // confirmedEmail brukes til å sjekke om bruker er innlogget i systemet.
     private String confirmedEmail;
 
-    //constructor
+    // konstruktør som tar inn confirmed Email fra innlogget bruker.
     public replyCtrl(String confirmedEmail ){
         this.confirmedEmail = confirmedEmail;
-
-    };
-
+    }
+    // askUser() henter inn brukerinput for å lage reply på Thread bruker ønsker ved å oppdatere globale variabler.
     public void askUser(){
-        Email = confirmedEmail;
 
+        // ber bruker skrive inn ThreadID av thread den vil replye på.
         Scanner sc1= new Scanner(System.in);
         System.out.print("Enter ThreadID of Thread you want to answer: ");  
         String str1 = sc1.nextLine();
@@ -35,7 +37,7 @@ public class replyCtrl extends dbconn{
         isAnonymous = Boolean.valueOf(anonymous);
     }
 
-    //Finner PostID som max(PostID)+1 fra en gitt ThreadID
+    // findPostID() finner PostID som max(PostID)+1 fra en gitt ThreadID
     public void findPostID(){
         try { 
             Statement stmt = conn.createStatement();
@@ -49,8 +51,8 @@ public class replyCtrl extends dbconn{
             System.out.println("db error during select of Post = "+e);
         }
     }
-
-    public void reply(){
+    // makeReply() setter inn en reply i databasen.
+    public void makeReply(){
         this.askUser();
         this.findPostID();
 
@@ -62,7 +64,7 @@ public class replyCtrl extends dbconn{
         try {
             regStatement.setInt(1, PostID);
             regStatement.setString(2, Description);
-            regStatement.setString(3, Email);
+            regStatement.setString(3, confirmedEmail);
             regStatement.setBoolean(4, isAnonymous);
             regStatement.setInt(5, ThreadID);
             regStatement.execute();
