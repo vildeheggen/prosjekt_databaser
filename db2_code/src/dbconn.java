@@ -16,7 +16,7 @@ public abstract class dbconn {
             //p.put("password", "DA&4t7&UzC3h");  
 
            //conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1/db?autoReconnect=true&useSSL=false&useJDBCCompliantTimezoneShift=true&serverTimezone=UTC",p);  
-            conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1/db?autoReconnect=true&useSSL=false&useJDBCCompliantTimezoneShift=true&serverTimezone=UTC",p);      
+           conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1/db?allowPublicKeyRetrieval=true&autoReconnect=true&useSSL=false",p);      
         } catch (Exception e){
             throw new RuntimeException("Unable to connect", e);
     	}
