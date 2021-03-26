@@ -14,7 +14,7 @@ public class Main {
                         Boolean loggedIn = true;
 
                         while (loggedIn) {
-                                System.out.print("Choose the usecase you want to run (2,3,4,5). Press 1 to log out.");
+                                System.out.print("Choose the usecase you want to run (2,3,4,5) or press 1 to log out: ");
                                 Scanner sc = new Scanner(System.in);
                                 Integer usecase = sc.nextInt();
 
