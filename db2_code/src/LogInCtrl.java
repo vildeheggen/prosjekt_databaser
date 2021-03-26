@@ -6,11 +6,11 @@ public class LogInCtrl extends dbconn{
     // confirmedEmail skal inneholde email til innlogget bruker, evnt en tom streng hvis innlogging feiler. 
     private String confirmedEmail;
 
-    // validerer log in ut i fra bruker input av email og passord med databasen.
-    // returnerer confirmedEmail med verdi lik input email fra bruker dersom den ble funnet i databasen.  
+    // login() sjekker om bruker-input av email og passord finnes som en rad i Users i databasen.
+    // Den returnerer confirmedEmail med verdi lik input-email fra bruker dersom den ble funnet i databasen.  
     public String login(){
 
-        //bruker input
+        //bruker-input
         Scanner sc1= new Scanner(System.in);
         System.out.print("Enter email: ");  
         String email= sc1.nextLine();

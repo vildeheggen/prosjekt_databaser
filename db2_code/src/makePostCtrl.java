@@ -3,10 +3,10 @@ import java.util.*;
 
 public class makePostCtrl extends dbconn{
 
-    //globale variabler som oppdateres når Thread og Post lages.
+    //globale variabler som oppdateres av innebygde funksjoner.
     public int ThreadID; 
     public int FolderID;
-    public int PostID = 1;
+    public int PostID = 1;                 //PostID er alltid 1, siden makePostCtrl alltid oppretter en ny Thread
     public int courseID;
     public String course_name;
     public String title;
@@ -38,7 +38,7 @@ public class makePostCtrl extends dbconn{
             //isMember er false
             return(isMember);}
 
-        // ber bruker skrive kurs den ønsker å poste thread i
+        // ber bruker skrive kurs den ønsker å opprette en ny Thread i
         Scanner sc1= new Scanner(System.in);
         System.out.print("Enter the course you want to post in: ");  
         String course_name= sc1.nextLine();
@@ -54,7 +54,7 @@ public class makePostCtrl extends dbconn{
         catch (Exception e) { 
             System.out.println("db error during select of Course = "+e);
         }
-        //sjekk om user er medlem av kurset
+        //sjekker om bukeren er medlem av kurset
         String query2 = "select * from members where email ='" + confirmedEmail + "' and courseID = '" + courseID + "'";
         try {
             Statement stmt2 = conn.createStatement();
