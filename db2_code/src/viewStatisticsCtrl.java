@@ -1,9 +1,10 @@
 import java.sql.*;
 import java.util.*;
 
-public class viewStatisticsCtrl extends dbconn{
+public class ViewStatisticsCtrl extends dbconn{
+    //Sjekker om emailen tatt inn fra brukeren tilhører en Instructor og returnerer true eller false deretter
     private boolean validateUser() {
-        System.out.print("Enter email: ");
+        System.out.println("In order to check statistics, please enter email:");
         Scanner sc1= new Scanner(System.in);
         String email = sc1.nextLine();
         sc1.close();
@@ -24,14 +25,15 @@ public class viewStatisticsCtrl extends dbconn{
             return false;
         }
     }
+    //Finner antall leste Thread og antall lagde Post for alle brukere i databasen og printer resultatet.
     public void numberRead(){
         Boolean instructor = this.validateUser();
         if (instructor){
-            String query = "SELECT Email, count(ViewThread.ThreadID) as numberRead, count(distinct PostID) as numberPosted FROM Users left outer join ViewThread using (Email) left outer join Post using (Email) group by Email order by numberRead desc;";
+            String query = "SELECT Email, count(distinct ViewThread.ThreadID) as numberRead, count(distinct PostID, Post.ThreadID) as numberPosted FROM Users left outer join ViewThread using (Email) left outer join Post using (Email) group by Email order by numberRead desc;";
             try {
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(query);
-                System.out.println("Number of posts users have read: ");
+                System.out.println("Number of posts users have read and created: ");
                 while(rs.next()){
                     System.out.println("Email: " + rs.getString(1) + " \t Number of posts read: " + rs.getString(2) + " \t Number of posts created: " + rs.getString(3) );
                 }

@@ -14,16 +14,16 @@ public class Main {
         //reply1.connect();
         //reply1.reply();
 
-        //SearchCtrl search = new SearchCtrl();
-        //search.connect();
-        //search.findPostsWithKeyWord();
+        SearchCtrl search = new SearchCtrl();
+        search.connect();
+        search.findPostsWithKeyWord();
 
         //ViewStatistics statistics = new ViewStatistics();
         //statistics.connect();
         //statistics.doQueries();
 
 
-        viewStatisticsCtrl ctrl = new viewStatisticsCtrl();
+        ViewStatisticsCtrl ctrl = new ViewStatisticsCtrl();
         ctrl.connect();
         ctrl.numberRead();
 
