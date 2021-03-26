@@ -12,10 +12,10 @@ public class SearchCtrl extends dbconn{
         try {
             Statement stmt = conn.createStatement();
             rs = stmt.executeQuery(query);
-            System.out.println("Found " + keyWord + " in: ");
             Boolean check = false;
             while (rs.next()){
                 check = true;
+                System.out.println("Found " + keyWord + " in: ");
                 System.out.println("ThreadID: " + rs.getInt("ThreadID") + " PostID: " + rs.getInt("PostID"));
             }
             if (!check){System.out.println("No posts with keyword "+keyWord);}
